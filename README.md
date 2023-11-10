@@ -2,7 +2,7 @@
 
 Multi-step form from [frontend-mentor](https://www.frontendmentor.io/challenges/multistep-form-YVAnSdqQBJ).
 
-## important
+## Important
 - You should have node > 20.0.0 and pnpm installed.
 
 ## Install the dependencies
