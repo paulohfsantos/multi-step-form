@@ -1,17 +1,19 @@
-# Quasar App (steps-form)
+# steps-form
 
-A Quasar Project
+Multi-step form from [frontend-mentor](https://www.frontendmentor.io/challenges/multistep-form-YVAnSdqQBJ).
 
 ## Install the dependencies
 ```bash
-yarn
-# or
-npm install
+pnpm install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
 quasar dev
+
+# or
+
+pnpm dev
 ```
 
 
