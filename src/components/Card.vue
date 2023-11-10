@@ -7,30 +7,35 @@
       <steps-container />
     </aside>
     <div class="flex flex-col w-full p-10 justify-between">
-      <div v-if="currentStep === 1">
+      <div v-if="stepStore.currentStep === 1">
         <step1 :form="formOne" />
       </div>
-      <div v-if="currentStep === 2">
+      <div v-if="stepStore.currentStep === 2">
         step 2
       </div>
-      <div v-if="currentStep === 3">
+      <div v-if="stepStore.currentStep === 3">
         step 3
       </div>
-      <div v-if="currentStep === 4">
+      <div v-if="stepStore.currentStep === 4">
         step 4
       </div>
 
       <div class="flex justify-end w-full">
-        <q-btn class="font-bold py-4 px-8 rounded-md mt-8" flat @click="prevStep">
+        <q-btn
+          v-if="stepStore.currentStep !== 1"
+          class="font-bold py-4 px-8 rounded-md mt-8"
+          flat
+          @click="prevStep"
+        >
           Go Back
         </q-btn>
 
         <q-btn
           class="bg-blue-900 text-white font-bold py-4 px-8 rounded-md mt-8 justify-end self-end place-self-end justify-self-end"
           @click="nextStep"
-          :disabled="currentStep === 4"
+          :disabled="stepStore.currentStep === 4"
         >
-          {{ currentStep === 4 ? 'Confirm' : 'Next Step' }}
+          {{ stepStore.currentStep === 4 ? 'Confirm' : 'Next Step' }}
         </q-btn>
       </div>
     </div>
@@ -46,28 +51,23 @@ import { ref } from 'vue'
 
 const stepStore = useSteps();
 
-let currentStep = ref(1)
 const formOne = ref({
   name: '',
   email: '',
   phone: '',
 })
 
-function handleSelectStep(stepNumber: number) {
-  stepStore.setStep(stepNumber)
-}
-
 function nextStep() {
-  if (currentStep.value === 4) {
+  if (stepStore.currentStep === 4) {
     return
   }
-  currentStep.value++
+  stepStore.setStep(stepStore.currentStep + 1)
 }
 
 function prevStep() {
-  if (currentStep.value === 1) {
+  if (stepStore.currentStep === 1) {
     return
   }
-  currentStep.value--
+  stepStore.setStep(stepStore.currentStep - 1)
 }
 </script>

@@ -1,10 +1,6 @@
 <template>
   <div class="flex gap-4">
-    <div
-      class="cursor-pointer"
-      :class="currentStep ? 'current step' : 'step'"
-      @click="selectStep"
-    >
+    <div :class="currentStep ? 'current step' : 'step'">
       {{ step }}
     </div>
     <div class="flex flex-col">
@@ -15,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   step: {
     type: Number,
     required: true,
@@ -29,12 +25,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const emit = defineEmits(['selectStep']);
-
-function selectStep() {
-  emit('selectStep', props.step);
-}
 </script>
 
 <style lang="postcss">
