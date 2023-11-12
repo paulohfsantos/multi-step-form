@@ -26,7 +26,12 @@
       <div class="input-control">
         <div class="flex justify-between">
           <label class="text-blue-900 font-medium" for="name">Email</label>
-          <span v-if="errors.email" class="text-red-500 text-sm font-semibold">{{ errors.email }}</span>
+          <span
+            v-if="errors.email"
+            class="text-red-500 text-sm font-semibold"
+          >
+            {{ errors.email }}
+          </span>
         </div>
         <q-input
           outlined
@@ -44,7 +49,12 @@
       <div class="input-control">
         <div class="flex justify-between">
           <label class="text-blue-900 font-medium" for="name">Phone</label>
-          <span v-if="errors.email" class="text-red-500 text-sm font-semibold">{{ errors.email }}</span>
+          <span
+            v-if="errors.phone"
+            class="text-red-500 text-sm font-semibold"
+          >
+            {{ errors.phone }}
+          </span>
         </div>
         <q-input
           outlined
