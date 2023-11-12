@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h1 class="text-3xl font-bold">Personal Info</h1>
-    <p class="text-gray-500">Please provide your name, email address, and phone number.</p>
+    <Title
+      title="Personal Info"
+      subtitle="Please provide your name, email address, and phone number."
+    />
 
     <q-form class="q-gutter-md mt-4">
       <div class="input-control">
@@ -73,6 +75,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { PropType } from 'vue'
+import Title from '../Title.vue';
 
 type Form = {
   name: string

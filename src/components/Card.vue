@@ -11,7 +11,13 @@
         <step1 :form="formOne" />
       </div>
       <div v-if="stepStore.currentStep === 2">
-        step 2
+        <step2
+          :plans="plans"
+          :selectedPlans="selectedPlans"
+          :billingPeriod="billingPeriod"
+          @update:selectedPlans="selectPlan"
+          @update:billingPeriod="updateBillingPeriod"
+        />
       </div>
       <div v-if="stepStore.currentStep === 3">
         step 3
@@ -20,10 +26,10 @@
         step 4
       </div>
 
-      <div class="flex justify-end w-full">
+      <div class="flex w-full" :class="isFirstStep ? 'justify-between' : 'justify-end'">
         <q-btn
-          v-if="stepStore.currentStep !== 1"
-          class="font-bold py-4 px-8 rounded-md mt-8"
+          v-if="isFirstStep"
+          class="font-bold py-4 px-8 rounded-md mt-8 text-blue-900"
           flat
           @click="prevStep"
         >
@@ -45,9 +51,12 @@
 <script setup lang="ts">
 import StepsContainer from './steps/StepsContainer.vue'
 import Step1 from './steps/Step1.vue'
+import Step2 from './steps/Step2.vue'
 import AsideImage from '../assets/images/bg-sidebar-desktop.svg'
+
 import { useSteps } from '../stores/steps'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import type { Plan } from '../types'
 
 const stepStore = useSteps();
 
@@ -56,6 +65,47 @@ const formOne = ref({
   email: '',
   phone: '',
 })
+
+const plans = ref<Plan[]>([
+  {
+    id: 1,
+    name: 'Arcade',
+    price: '$9/mo',
+    icon: 'games',
+    bgColor: 'bg-orange-300',
+  },
+  {
+    id: 2,
+    name: 'Advanced',
+    price: '$12/mo',
+    icon: 'videogame_asset',
+    bgColor: 'bg-red-300',
+  },
+  {
+    id: 3,
+    name: 'Pro',
+    price: '$15/mo',
+    icon: 'sports_esports',
+    bgColor: 'bg-blue-300',
+  },
+])
+
+const isFirstStep = computed(() => stepStore.currentStep !== 1)
+
+const selectedPlans = ref<Plan[]>([])
+const billingPeriod = ref<'monthly' | 'yearly'>('monthly')
+
+function selectPlan(plan: Plan) {
+  if (selectedPlans.value.includes(plan)) {
+    selectedPlans.value = selectedPlans.value.filter((p) => p.id !== plan.id)
+  } else {
+    selectedPlans.value = [...selectedPlans.value, plan]
+  }
+}
+
+function updateBillingPeriod(period: 'monthly' | 'yearly') {
+  billingPeriod.value = period
+}
 
 function nextStep() {
   if (stepStore.currentStep === 4) {
