@@ -1,5 +1,4 @@
 <template>
-  <!-- div full height centered content -->
   <div class="flex flex-col items-center justify-center h-max">
     <div class="p-5 mt-24">
       <figure class="flex justify-center">

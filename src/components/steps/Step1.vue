@@ -39,7 +39,6 @@
           outlined
           placeholder="Email"
           v-model="form.email"
-          type="email"
           :errorMessage="' '"
           noErrorIcon
           :rules="[
@@ -73,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import type { PropType } from 'vue'
 import Title from '../Title.vue';
 
@@ -83,7 +82,7 @@ type Form = {
   phone: string
 }
 
-const props = defineProps({
+defineProps({
   form: {
     type: Object as PropType<Form>,
     required: true,
@@ -95,10 +94,4 @@ const errors = ref({
   email: '',
   phone: '',
 })
-
-watch(() => props.form, (form) => {
-  errors.value.name = form.name.length === 0 ? 'Name is required' : ''
-  errors.value.email = form.email.match(/.+@.+\..+/) ? '' : 'Invalid email'
-  errors.value.phone = form.phone.length < 15 ? 'Phone is required' : ''
-}, { deep: true })
 </script>
