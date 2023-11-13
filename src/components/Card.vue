@@ -147,7 +147,7 @@ const isAllArrayEmpty = computed(() => {
 
 const finishing = computed(() => {
   return (
-    stepStore.currentStep === 5 &&
+    stepStore.currentStep === 4 &&
     isAllArrayEmpty.value
   )
 })
@@ -186,13 +186,6 @@ function nextStep() {
 }
 
 async function submitData() {
-  // console.log({
-  //   formOne: formOne.value,
-  //   selectedPlans: selectedPlans.value,
-  //   billingPeriod: billingPeriod.value,
-  //   selectedAddons: selectedAddons.value,
-  // });
-
   let data = {
     formOne: formOne.value,
     selectedPlans: selectedPlans.value,

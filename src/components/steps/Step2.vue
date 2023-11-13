@@ -22,7 +22,7 @@
               {{ plan.name }}
             </div>
             <div class="text-gray-500">
-              {{ plan.price }}
+              ${{ plan.price }}/{{ billing }}
             </div>
           </div>
         </div>
@@ -51,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { PropType } from 'vue'
 import Title from '../Title.vue';
 import type { Plan } from '../../types'
@@ -71,6 +72,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:selectedPlans', 'update:billingPeriod'])
+
+const billing = computed(() => props.billingPeriod === 'monthly' ? 'mo' : 'yr')
 
 function isSelected(plan: Plan) {
   return props.selectedPlans.some(p => p.id === plan.id)
