@@ -28,6 +28,10 @@
       </div>
       <div v-if="stepStore.currentStep === 4">
         <step4
+          :addonChoosen="addons"
+          :plansChoosen="selectedPlans"
+          :billingPeriod="billingPeriod"
+          @goToStep="goToStep"
         />
       </div>
 
@@ -77,21 +81,21 @@ const plans = ref<Plan[]>([
   {
     id: 1,
     name: 'Arcade',
-    price: '$9/mo',
+    price: '9',
     icon: 'games',
     bgColor: 'bg-orange-300',
   },
   {
     id: 2,
     name: 'Advanced',
-    price: '$12/mo',
+    price: '12',
     icon: 'videogame_asset',
     bgColor: 'bg-red-300',
   },
   {
     id: 3,
     name: 'Pro',
-    price: '$15/mo',
+    price: '15',
     icon: 'sports_esports',
     bgColor: 'bg-blue-300',
   },
@@ -118,8 +122,11 @@ const isFirstStep = computed(() => stepStore.currentStep !== 1)
 
 const selectedPlans = ref<Plan[]>([])
 const billingPeriod = ref<'monthly' | 'yearly'>('monthly')
-
 const serviceSelected = ref(false)
+
+function goToStep(step: number) {
+  stepStore.setStep(step)
+}
 
 function selectPlan(plan: Plan) {
   if (selectedPlans.value.includes(plan)) {
