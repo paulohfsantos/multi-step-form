@@ -24,6 +24,12 @@
       :current-step="stepStore.currentStep === 4"
       @selectStep="selectStep"
     />
+    <step
+      description="Confirmation"
+      :step="5"
+      :current-step="stepStore.currentStep === 5"
+      @selectStep="selectStep"
+    />
   </div>
 </template>
 

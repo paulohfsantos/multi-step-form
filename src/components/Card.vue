@@ -10,6 +10,7 @@
       <div v-if="stepStore.currentStep === 1">
         <step1 :form="formOne" />
       </div>
+
       <div v-if="stepStore.currentStep === 2">
         <step2
           :plans="plans"
@@ -19,6 +20,7 @@
           @update:billingPeriod="updateBillingPeriod"
         />
       </div>
+
       <div v-if="stepStore.currentStep === 3">
         <step3
           :addons="addons"
@@ -26,18 +28,23 @@
           @update:selectedServices="updateServices"
         />
       </div>
+
       <div v-if="stepStore.currentStep === 4">
         <step4
-          :addonChoosen="addons"
+          :addonChoosen="selectedAddons"
           :plansChoosen="selectedPlans"
           :billingPeriod="billingPeriod"
           @goToStep="goToStep"
         />
       </div>
 
+      <div v-if="stepStore.currentStep === 5">
+        <step5 />
+      </div>
+
       <div class="flex w-full" :class="isFirstStep ? 'justify-between' : 'justify-end'">
         <q-btn
-          v-if="isFirstStep"
+          v-if="isFirstStep && stepStore.currentStep !== 5"
           class="font-bold py-4 px-8 rounded-md mt-8 text-blue-900"
           flat
           @click="prevStep"
@@ -48,7 +55,8 @@
         <q-btn
           class="bg-blue-900 text-white font-bold py-4 px-8 rounded-md mt-8 justify-end self-end place-self-end justify-self-end"
           @click="nextStep"
-          :disabled="stepStore.currentStep === 4"
+          :disable="finishing"
+          v-if="stepStore.currentStep !== 5"
         >
           {{ stepStore.currentStep === 4 ? 'Confirm' : 'Next Step' }}
         </q-btn>
@@ -63,14 +71,18 @@ import Step1 from './steps/Step1.vue'
 import Step2 from './steps/Step2.vue'
 import Step3 from './steps/Step3.vue'
 import Step4 from './steps/Step4.vue'
+import Step5 from './steps/Step5.vue'
 import AsideImage from '../assets/images/bg-sidebar-desktop.svg'
 
 import { useSteps } from '../stores/steps'
+import { useQuasar } from 'quasar'
 import { ref, computed } from 'vue'
 import type { Plan, AddOn } from '../types'
 
 const stepStore = useSteps();
+const { notify } = useQuasar();
 
+// local variables
 const formOne = ref({
   name: '',
   email: '',
@@ -118,12 +130,29 @@ const addons = ref<AddOn[]>([
   },
 ])
 
-const isFirstStep = computed(() => stepStore.currentStep !== 1)
-
 const selectedPlans = ref<Plan[]>([])
 const billingPeriod = ref<'monthly' | 'yearly'>('monthly')
 const serviceSelected = ref(false)
 
+// computed area
+const selectedAddons = computed(() => addons.value.filter((a) => a.checked))
+const isFirstStep = computed(() => stepStore.currentStep !== 1)
+
+const isAllArrayEmpty = computed(() => {
+  return (
+    selectedPlans.value.length === 0 &&
+    selectedAddons.value.length === 0
+  )
+})
+
+const finishing = computed(() => {
+  return (
+    stepStore.currentStep === 5 &&
+    isAllArrayEmpty.value
+  )
+})
+
+// methods
 function goToStep(step: number) {
   stepStore.setStep(step)
 }
@@ -138,6 +167,7 @@ function selectPlan(plan: Plan) {
 
 function updateServices(info: { id: number; selected: boolean }) {
   const index = addons.value.findIndex(a => a.id === info.id);
+
   if (index !== -1) {
     addons.value[index] = { ...addons.value[index], checked: info.selected };
   }
@@ -148,10 +178,36 @@ function updateBillingPeriod(period: 'monthly' | 'yearly') {
 }
 
 function nextStep() {
-  if (stepStore.currentStep === 4) {
+  if (finishing.value) {
+    submitData()
     return
   }
   stepStore.setStep(stepStore.currentStep + 1)
+}
+
+async function submitData() {
+  // console.log({
+  //   formOne: formOne.value,
+  //   selectedPlans: selectedPlans.value,
+  //   billingPeriod: billingPeriod.value,
+  //   selectedAddons: selectedAddons.value,
+  // });
+
+  let data = {
+    formOne: formOne.value,
+    selectedPlans: selectedPlans.value,
+    billingPeriod: billingPeriod.value,
+    selectedAddons: selectedAddons.value,
+  }
+
+  notify({
+    message: 'Data submitted',
+    color: 'green-4',
+    position: 'top',
+    icon: 'cloud_done',
+  })
+
+  console.log(data);
 }
 
 function prevStep() {

@@ -83,6 +83,12 @@ const total = computed(() => {
   return plansTotal + addonsTotal
 })
 
+console.log({
+  addon: props.addonChoosen.length,
+  plans: props.plansChoosen.length
+});
+
+
 const emit = defineEmits(['goToStep'])
 
 const goToStep = () => {

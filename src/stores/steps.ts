@@ -9,7 +9,7 @@ export const useSteps = defineStore('steps', () => {
   }
 
   function nextStep() {
-    if (currentStep.value < 4) {
+    if (currentStep.value < 5) {
       currentStep.value ++;
     }
   }
