@@ -20,10 +20,15 @@
         />
       </div>
       <div v-if="stepStore.currentStep === 3">
-        step 3
+        <step3
+          :addons="addons"
+          :onlineService="serviceSelected"
+          @update:selectedServices="updateServices"
+        />
       </div>
       <div v-if="stepStore.currentStep === 4">
-        step 4
+        <step4
+        />
       </div>
 
       <div class="flex w-full" :class="isFirstStep ? 'justify-between' : 'justify-end'">
@@ -52,11 +57,13 @@
 import StepsContainer from './steps/StepsContainer.vue'
 import Step1 from './steps/Step1.vue'
 import Step2 from './steps/Step2.vue'
+import Step3 from './steps/Step3.vue'
+import Step4 from './steps/Step4.vue'
 import AsideImage from '../assets/images/bg-sidebar-desktop.svg'
 
 import { useSteps } from '../stores/steps'
 import { ref, computed } from 'vue'
-import type { Plan } from '../types'
+import type { Plan, AddOn } from '../types'
 
 const stepStore = useSteps();
 
@@ -90,16 +97,42 @@ const plans = ref<Plan[]>([
   },
 ])
 
+const addons = ref<AddOn[]>([
+  {
+    id: 1,
+    title: 'Online Service',
+    subtitle: 'Access to multiplayer games',
+    checked: false,
+    price: 1,
+  },
+  {
+    id: 2,
+    title: 'Larger storage',
+    subtitle: 'Extra 1GB of cloud save',
+    checked: false,
+    price: 2,
+  },
+])
+
 const isFirstStep = computed(() => stepStore.currentStep !== 1)
 
 const selectedPlans = ref<Plan[]>([])
 const billingPeriod = ref<'monthly' | 'yearly'>('monthly')
+
+const serviceSelected = ref(false)
 
 function selectPlan(plan: Plan) {
   if (selectedPlans.value.includes(plan)) {
     selectedPlans.value = selectedPlans.value.filter((p) => p.id !== plan.id)
   } else {
     selectedPlans.value = [...selectedPlans.value, plan]
+  }
+}
+
+function updateServices(info: { id: number; selected: boolean }) {
+  const index = addons.value.findIndex(a => a.id === info.id);
+  if (index !== -1) {
+    addons.value[index] = { ...addons.value[index], checked: info.selected };
   }
 }
 
